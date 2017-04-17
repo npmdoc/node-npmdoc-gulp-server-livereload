@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/hiddentao/gulp-server-livereload"
-
-    >gulp-server-livereload (v1.9.2)</a>
+    <a href="https://github.com/hiddentao/gulp-server-livereload">gulp-server-livereload (v1.9.2)</a>
 </h1>
 <h4>Gulp plugin to run a local webserver with livereload enabled via socket.io. Also comes with standalone command-line interface.</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.gulp-server-livereload">module gulp-server-livereload</a><ol>
 
@@ -114,25 +107,25 @@
      * BASIC DEFAULTS
      *
      **/
-</span>    host: &#x27;localhost&#x27;,
+</span>    host: 'localhost',
     port: 8000,
-    defaultFile: &#x27;index.html&#x27;,
+    defaultFile: 'index.html',
     fallback: null,
     fallbackLogic: function(req, res, fallbackFile) {
-      res.setHeader(&#x27;Content-Type&#x27;, &#x27;text/html; charset=UTF-8&#x27;);
+      res.setHeader('Content-Type', 'text/html; charset=UTF-8');
       fs.createReadStream(fallbackFile).pipe(res);
     },
     https: false,
     open: false,
-    log: &#x27;info&#x27;,
-    clientLog: &#x27;debug&#x27;,
+    log: 'info',
+    clientLog: 'debug',
 
     /**
      *
      * MIDDLEWARE DEFAULTS
      *
      * NOTE:
-     *  All middleware should defaults should have the &#x27;enable&#x27;
+     *  All middleware should defaults should have the 'enable'
      *  property if you want to support shorthand syntax like:
      *
      *    webserver({
@@ -157,7 +150,7 @@
     //  https://github.com/expressjs/serve-index
     directoryListing: {
       enable: false,
-      path: &#x27;./&#x27;,
+      path: './',
       options: undefined
     },
 
@@ -170,21 +163,21 @@
 
   // Deep extend user provided options over the all of the defaults
   // Allow shorthand syntax, using the enable property as a flag
-  var config = enableMiddlewareShorthand(defaults, options, [&#x27;directoryListing&#x27;, &#x27;livereload&#x27;]);
+  var config = enableMiddlewareShorthand(defaults, options, ['directoryListing', 'livereload']);
 
-  var logger = bindLogger(config.log, &#x27;server&#x27;);
-  var clientLogger = bindLogger(config.clientLog, &#x27;client&#x27;);
+  var logger = bindLogger(config.log, 'server');
+  var clientLogger = bindLogger(config.clientLog, 'client');
 
   instanceNumber += 1;
 
   var httpsOptions = {
-    key: fs.readFileSync(config.https.key || __dirname + &#x27;/../ssl/dev-key.pem&#x27;),
-    cert: fs.readFileSync(config.https.cert || __dirname + &#x27;/../ssl/dev-cert.pem&#x27;)
+    key: fs.readFileSync(config.https.key || __dirname + '/../ssl/dev-key.pem'),
+    cert: fs.readFileSync(config.https.cert || __dirname + '/../ssl/dev-cert.pem')
   };
 
   var openInBrowser = function () {
     if (config.open === false) return;
-    open(&#x27;http&#x27; + (config.https ? &#x27;s&#x27; : &#x27;&#x27;) + &#x27;://&#x27; + config.host + &#x27;:&#x27; + config.port);
+    open('http' + (config.https ? 's' : '') + '://' + config.host + ':' + config.port);
     openInBrowser = undefined;
   };
 
@@ -193,24 +186,24 @@
 
   // Disable browser cache(fix #15)
   app.use(function (req, res, next) {
-    res.setHeader(&#x22;Cache-Control&#x22;, &#x22;no-cache, no-store, must-revalidate&#x22;);
-    res.setHeader(&#x22;Pragma&#x22;, &#x22;no-cache&#x22;);
-    res.setHeader(&#x22;Expires&#x22;, 0);
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", 0);
 
     next();
   });
 
   // Proxy requests
-  for (var i = 0, len = config.proxies.length; i &#x3c; len; i++) {
+  for (var i = 0, len = config.proxies.length; i &lt; len; i++) {
     var proxyoptions = url.parse(config.proxies[i].target);
-    if (config.proxies[i].hasOwnProperty(&#x27;options&#x27;)) {
+    if (config.proxies[i].hasOwnProperty('options')) {
       extend(proxyoptions, config.proxies[i].options);
     }
 
     proxyoptions.route = config.proxies[i].source;
     app.use(proxy(proxyoptions));
 
-    logger.debug(config.proxies[i].source + &#x27; is proxied.&#x27;);
+    logger.debug(config.proxies[i].source + ' is proxied.');
   }
   //  directory listing
   if (config.directoryListing.enable) {
@@ -222,23 +215,23 @@
     var snippetParams = [];
 
     if (config.livereload.clientConsole) {
-      snippetParams.push(&#x22;extra=capture-console&#x22;);
+      snippetParams.push("extra=capture-console");
     }
 
-    // If it wasn&#x27;t provided, use the server host:
-    var markupHost = !!_.get(config.livereload.markupHost, &#x27;length&#x27;)
-      ? &#x22;&#x27;&#x22; + config.livereload.markupHost + &#x22;&#x27;&#x22;
+    // If it wasn't provided, use the server host:
+    var markupHost = !!_.get(config.livereload.markupHost, 'length')
+      ? "'" + config.livereload.markupHost + "'"
       : null;
 
     var snippet =
-      &#x22;&#x3c;script type=\&#x22;text/javascript\&#x22;&#x3e;&#x22;
-      + &#x22;var _lrscript = document.createElement(&#x27;script&#x27;);&#x22;
-      + &#x22;_lrscript.type = &#x27;text/javascript&#x27;;&#x22;
-      + &#x22;_lrscript.defer = _lrscript.async = true;&#x22;
-      + &#x22;_lrscript.src = &#x27;//&#x27; + ((&#x22; + markupHost + &#x22;||location.host).split(&#x27;:&#x27;)[0]) + &#x27;:&#x22;+config.livereload.port+&#x22;/livereload.js
-?&#x22;+snippetParams.join(&#x27;&#x26;&#x27;)+&#x22;&#x27;;&#x22;
-      + &#x22;document.body.appendChild(_lrscript);&#x22;
-      + &#x22;&#x3c;/script&#x3e;&#x22;;
+      "&lt;script type=\"text/javascript\"&gt;"
+      + "var _lrscript = document.createElement('script');"
+      + "_lrscript.type = 'text/javascript';"
+      + "_lrscript.defer = _lrscript.async = true;"
+      + "_lrscript.src = '//' + ((" + markupHost + "||location.host).split(':')[0]) + ':"+config.livereload.port+"/livereload.js
+?"+snippetParams.join('&amp;')+"';"
+      + "document.body.appendChild(_lrscript);"
+      + "&lt;/script&gt;";
 
     var prepend = function(w, s) {
       return s + w;
@@ -251,13 +244,13 @@
     app.use(inject({
       snippet: snippet,
       rules: [{
-        match: /&#x3c;\/body&#x3e;/,
+        match: /&lt;\/body&gt;/,
         fn: prepend
       }, {
-        match: /&#x3c;\/html&#x3e;/,
+        match: /&lt;\/html&gt;/,
         fn: prepend
       }, {
-        match: /&#x3c;\!DOCTYPE.+&#x3e;/,
+        match: /&lt;\!DOCTYPE.+&gt;/,
         fn: append ...</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
@@ -304,3 +297,4 @@
     ]
 </div>
 </div>
+</body></html>

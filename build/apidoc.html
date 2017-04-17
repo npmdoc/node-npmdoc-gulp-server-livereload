@@ -61,12 +61,240 @@
 
     <li class="apidocModuleLi"><a href="#apidoc.module.gulp-server-livereload">module gulp-server-livereload</a><ol>
 
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-server-livereload.gulp-server-livereload">
+            function <span class="apidocSignatureSpan"></span>gulp-server-livereload
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-server-livereload.toString">
+            function <span class="apidocSignatureSpan">gulp-server-livereload.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.gulp-server-livereload.toString">module gulp-server-livereload.toString</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-server-livereload.toString.toString">
+            function <span class="apidocSignatureSpan">gulp-server-livereload.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
     </ol></li>
 
 </ol></div>
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.gulp-server-livereload" id="apidoc.module.gulp-server-livereload">module gulp-server-livereload</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-server-livereload.gulp-server-livereload" id="apidoc.element.gulp-server-livereload.gulp-server-livereload">
+        function <span class="apidocSignatureSpan"></span>gulp-server-livereload
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">gulp-server-livereload = function (options) {
+  var defaults = {
+<span class="apidocCodeCommentSpan">    /**
+     *
+     * BASIC DEFAULTS
+     *
+     **/
+</span>    host: &#x27;localhost&#x27;,
+    port: 8000,
+    defaultFile: &#x27;index.html&#x27;,
+    fallback: null,
+    fallbackLogic: function(req, res, fallbackFile) {
+      res.setHeader(&#x27;Content-Type&#x27;, &#x27;text/html; charset=UTF-8&#x27;);
+      fs.createReadStream(fallbackFile).pipe(res);
+    },
+    https: false,
+    open: false,
+    log: &#x27;info&#x27;,
+    clientLog: &#x27;debug&#x27;,
+
+    /**
+     *
+     * MIDDLEWARE DEFAULTS
+     *
+     * NOTE:
+     *  All middleware should defaults should have the &#x27;enable&#x27;
+     *  property if you want to support shorthand syntax like:
+     *
+     *    webserver({
+     *      livereload: true
+     *    });
+     *
+     */
+
+    // Middleware: Livereload
+    livereload: {
+      enable: false,
+      markupHost: null,
+      port: 35729,
+      filter: function(filename, cb) {
+        cb( !(/node_modules/.test(filename)) );
+      },
+      clientConsole: false,
+    },
+
+    // Middleware: Directory listing
+    // For possible options, see:
+    //  https://github.com/expressjs/serve-index
+    directoryListing: {
+      enable: false,
+      path: &#x27;./&#x27;,
+      options: undefined
+    },
+
+    // Middleware: Proxy
+    // For possible options, see:
+    //  https://github.com/andrewrk/connect-proxy
+    proxies: []
+
+  };
+
+  // Deep extend user provided options over the all of the defaults
+  // Allow shorthand syntax, using the enable property as a flag
+  var config = enableMiddlewareShorthand(defaults, options, [&#x27;directoryListing&#x27;, &#x27;livereload&#x27;]);
+
+  var logger = bindLogger(config.log, &#x27;server&#x27;);
+  var clientLogger = bindLogger(config.clientLog, &#x27;client&#x27;);
+
+  instanceNumber += 1;
+
+  var httpsOptions = {
+    key: fs.readFileSync(config.https.key || __dirname + &#x27;/../ssl/dev-key.pem&#x27;),
+    cert: fs.readFileSync(config.https.cert || __dirname + &#x27;/../ssl/dev-cert.pem&#x27;)
+  };
+
+  var openInBrowser = function () {
+    if (config.open === false) return;
+    open(&#x27;http&#x27; + (config.https ? &#x27;s&#x27; : &#x27;&#x27;) + &#x27;://&#x27; + config.host + &#x27;:&#x27; + config.port);
+    openInBrowser = undefined;
+  };
+
+  // connect app
+  var app = connect();
+
+  // Disable browser cache(fix #15)
+  app.use(function (req, res, next) {
+    res.setHeader(&#x22;Cache-Control&#x22;, &#x22;no-cache, no-store, must-revalidate&#x22;);
+    res.setHeader(&#x22;Pragma&#x22;, &#x22;no-cache&#x22;);
+    res.setHeader(&#x22;Expires&#x22;, 0);
+
+    next();
+  });
+
+  // Proxy requests
+  for (var i = 0, len = config.proxies.length; i &#x3c; len; i++) {
+    var proxyoptions = url.parse(config.proxies[i].target);
+    if (config.proxies[i].hasOwnProperty(&#x27;options&#x27;)) {
+      extend(proxyoptions, config.proxies[i].options);
+    }
+
+    proxyoptions.route = config.proxies[i].source;
+    app.use(proxy(proxyoptions));
+
+    logger.debug(config.proxies[i].source + &#x27; is proxied.&#x27;);
+  }
+  //  directory listing
+  if (config.directoryListing.enable) {
+    app.use(serveIndex(path.resolve(config.directoryListing.path), config.directoryListing.options));
+  }
+
+  // socket.io
+  if (config.livereload.enable) {
+    var snippetParams = [];
+
+    if (config.livereload.clientConsole) {
+      snippetParams.push(&#x22;extra=capture-console&#x22;);
+    }
+
+    // If it wasn&#x27;t provided, use the server host:
+    var markupHost = !!_.get(config.livereload.markupHost, &#x27;length&#x27;)
+      ? &#x22;&#x27;&#x22; + config.livereload.markupHost + &#x22;&#x27;&#x22;
+      : null;
+
+    var snippet =
+      &#x22;&#x3c;script type=\&#x22;text/javascript\&#x22;&#x3e;&#x22;
+      + &#x22;var _lrscript = document.createElement(&#x27;script&#x27;);&#x22;
+      + &#x22;_lrscript.type = &#x27;text/javascript&#x27;;&#x22;
+      + &#x22;_lrscript.defer = _lrscript.async = true;&#x22;
+      + &#x22;_lrscript.src = &#x27;//&#x27; + ((&#x22; + markupHost + &#x22;||location.host).split(&#x27;:&#x27;)[0]) + &#x27;:&#x22;+config.livereload.port+&#x22;/livereload.js
+?&#x22;+snippetParams.join(&#x27;&#x26;&#x27;)+&#x22;&#x27;;&#x22;
+      + &#x22;document.body.appendChild(_lrscript);&#x22;
+      + &#x22;&#x3c;/script&#x3e;&#x22;;
+
+    var prepend = function(w, s) {
+      return s + w;
+    };
+
+    var append = function(w, s) {
+      return w + s;
+    }
+
+    app.use(inject({
+      snippet: snippet,
+      rules: [{
+        match: /&#x3c;\/body&#x3e;/,
+        fn: prepend
+      }, {
+        match: /&#x3c;\/html&#x3e;/,
+        fn: prepend
+      }, {
+        match: /&#x3c;\!DOCTYPE.+&#x3e;/,
+        fn: append ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-server-livereload.toString" id="apidoc.element.gulp-server-livereload.toString">
+        function <span class="apidocSignatureSpan">gulp-server-livereload.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return text;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.gulp-server-livereload.toString" id="apidoc.module.gulp-server-livereload.toString">module gulp-server-livereload.toString</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-server-livereload.toString.toString" id="apidoc.element.gulp-server-livereload.toString.toString">
+        function <span class="apidocSignatureSpan">gulp-server-livereload.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
 
 </div>
 
