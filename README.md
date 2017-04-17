@@ -1,9 +1,11 @@
 # api documentation for  [gulp-server-livereload (v1.9.2)](https://github.com/hiddentao/gulp-server-livereload)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-server-livereload.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-server-livereload) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-server-livereload.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-server-livereload)
 #### Gulp plugin to run a local webserver with livereload enabled via socket.io. Also comes with standalone command-line interface.
 
-[![NPM](https://nodei.co/npm/gulp-server-livereload.png?downloads=true)](https://www.npmjs.com/package/gulp-server-livereload)
+[![NPM](https://nodei.co/npm/gulp-server-livereload.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/gulp-server-livereload)
 
-[![apidoc](https://npmdoc.github.io/node-npmdoc-gulp-server-livereload/build/screenCapture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-gulp-server-livereload_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-gulp-server-livereload/build/apidoc.html)
+- [https://npmdoc.github.io/node-npmdoc-gulp-server-livereload/build/apidoc.html](https://npmdoc.github.io/node-npmdoc-gulp-server-livereload/build/apidoc.html)
+
+[![apidoc](https://npmdoc.github.io/node-npmdoc-gulp-server-livereload/build/screenCapture.buildCi.browser.%252Ftmp%252Fbuild%252Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-gulp-server-livereload/build/apidoc.html)
 
 ![npmPackageListing](https://npmdoc.github.io/node-npmdoc-gulp-server-livereload/build/screenCapture.npmPackageListing.svg)
 
@@ -18,7 +20,6 @@
 {
     "author": {
         "name": "Ramesh Nair",
-        "email": "ram@hiddentao.com",
         "url": "http://hiddentao.com"
     },
     "bin": {
@@ -70,13 +71,11 @@
     "main": "src/index.js",
     "maintainers": [
         {
-            "name": "hiddentao",
-            "email": "ram@hiddentao.com"
+            "name": "hiddentao"
         }
     ],
     "name": "gulp-server-livereload",
     "optionalDependencies": {},
-    "readme": "ERROR: No README data found!",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/hiddentao/gulp-server-livereload.git"
@@ -88,16 +87,6 @@
     "version": "1.9.2"
 }
 ```
-
-
-
-# <a name="apidoc.tableOfContents"></a>[table of contents](#apidoc.tableOfContents)
-
-#### [module gulp-server-livereload](#apidoc.module.gulp-server-livereload)
-
-
-
-# <a name="apidoc.module.gulp-server-livereload"></a>[module gulp-server-livereload](#apidoc.module.gulp-server-livereload)
 
 
 
