@@ -1,4 +1,7 @@
-# api documentation for  [gulp-server-livereload (v1.9.2)](https://github.com/hiddentao/gulp-server-livereload)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-server-livereload.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-server-livereload) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-server-livereload.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-server-livereload)
+# npmdoc-gulp-server-livereload
+
+#### basic api documentation for  [gulp-server-livereload (v1.9.2)](https://github.com/hiddentao/gulp-server-livereload)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-server-livereload.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-server-livereload) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-server-livereload.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-server-livereload)
+
 #### Gulp plugin to run a local webserver with livereload enabled via socket.io. Also comes with standalone command-line interface.
 
 [![NPM](https://nodei.co/npm/gulp-server-livereload.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/gulp-server-livereload)
